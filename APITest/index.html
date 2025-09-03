@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Notícias sobre Água</title>
+</head>
+<body>
+    <h1>Últimas notícias sobre água</h1>
+
+    {% if noticias %}
+        <ul>
+            {% for n in noticias %}
+                <li>
+                    <h2>{{ n.titulo }}</h2>
+                    <p><strong>Fonte:</strong> {{ n.fonte }}</p>
+                    <p>{{ n.resumo }}</p>
+                    <a href="{{ n.link }}" target="_blank">Ler mais</a>
+                    <hr>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nenhuma notícia encontrada.</p>
+    {% endif %}
+</body>
+</html>

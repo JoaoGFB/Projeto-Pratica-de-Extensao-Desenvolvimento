@@ -1,0 +1,55 @@
+Seguinte eu copiei a gambiarra
+
+
+as coisas abaixo é o quê tem e o que arrumar.
+ 
+
+vou dar uma explicada  se for rodar é o app.py
+====
+news_api.py puxa a api e faz a busca
+main.py ajustar como vai ficar o formato
+app.py tem um limite de tempo para rodar a api (24h) e para tacar para o html
+
+Coisas a mudar se subir o código
+
+quando for colocar o site no ar a minha chave da api
+tem que deixar como variavel ambiente e não subir no site 
+--
+Variável de ambiente para a API_KEY
+Hoje você importa from API import API_KEY.
+Em servidor, é melhor:
+
+import os
+API_KEY = os.getenv("NEWS_API_KEY")
+
+
+E definir no servidor:
+
+export NEWS_API_KEY="sua_chave_aqui"
+---
+
+
+
+no app.py
+essa parte tem que mudar
+if __name__ == "__main__":
+    app.run(debug=True)
+
+Considerando o quê está abaixo (pois debug é melhor em recomendado em localmente não em servidor)
+--
+Remover o debug=True no app.run():
+
+if __name__ == "__main__":
+    app.run()
+
+
+O debug=True é bom localmente, mas não em produção.
+
+Rodar com Gunicorn (ou outro WSGI):
+Em vez de python app.py, você rodaria:
+
+gunicorn app:app
+
+
+(isso já usa sua app = Flask(__name__) como entrada).
+--
