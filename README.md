@@ -23,4 +23,4 @@ A API ficará disponível em http://localhost:5000/news.
 cd projetohidrocity
 python -m http.server 8000
 ````
-# abra http://localhost:8000
+abra http://localhost:8000
