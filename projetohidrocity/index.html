@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Monitor da Água em Londrina - HidroCity</title>
   <link rel="stylesheet" href="Estilo/Style.css">
-  <link rel="shortcut icon" href="Estilo/Ícones/ms-icon-310x310.png" type="image/x-icon">
+  <link rel="shortcut icon" href="Estilo/Icones/ms-icon-310x310.png" type="image/x-icon">
 </head>
 <body>
   <header>
@@ -16,38 +16,76 @@
     <section class="noticias">
       <h2>Últimas Notícias</h2>
       <div class="news-container">
-        <!--exemplo de notícia-->
-        <div class="news-card">
-          <h3>título notítcia</h3>
-          <p>informações da notícia...</p>
-          <a href="#" target="_blank">Ler mais</a>
-        </div>
-
-        <div class="news-card">
-          <h3>título notítcia</h3>
-          <p>informações da notícia...</p>
-          <a href="#" target="_blank">Ler mais</a>
-        </div>
-
-        <div class="news-card">
-          <h3>título notítcia</h3>
-          <p>informações da notícia...</p>
-          <a href="#" target="_blank">Ler mais</a>
-        </div>
+        <!-- O conteúdo será preenchido dinamicamente via JS -->
       </div>
 
       <div class="btn-container">
-        <a class="btn-portfolio" href="https://hidrocityextensao.netlify.app/" target="_blank">
+        <a class="btn-portfolio" href="https://hidrocityextensao.netlify.app/" target="_blank" rel="noopener noreferrer">
           Saiba mais sobre o Projeto
         </a>
       </div>
     </section>
   </main>
   <footer>
-    <img src="Estilo/Ícones/unifilLogo.png" alt="Logo UniFil">
+    <img src="Estilo/Icones/unifilLogo.png" alt="Logo UniFil">
     <p class="footer-text">
       Projeto de Extensão HidroCity - Centro Universitário Filadélfia (UniFil)
     </p>
   </footer>
+
+  <!-- Script que busca as notícias no backend local -->
+  <script>
+/* Config - para produção troque por 'https://SEU_BACKEND_PRODUCAO/news' */
+const NEWS_ENDPOINT = 'http://localhost:5000/news';
+
+function formatarData(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+}
+
+function truncar(texto, n = 180) {
+  if (!texto) return '';
+  return texto.length > n ? texto.slice(0, n) + '...' : texto;
+}
+
+async function carregarNoticias() {
+  const container = document.querySelector('.news-container');
+  container.innerHTML = '<p>Carregando notícias...</p>';
+
+  try {
+    const res = await fetch(NEWS_ENDPOINT);
+    if (!res.ok) throw new Error('Status ' + res.status);
+    const noticias = await res.json();
+    if (!Array.isArray(noticias) || noticias.length === 0) {
+      container.innerHTML = '<p>Nenhuma notícia encontrada.</p>';
+      return;
+    }
+
+    container.innerHTML = '';
+    noticias.forEach(n => {
+      const card = document.createElement('article');
+      card.className = 'news-card';
+      // tornar o card inteiro clicável com <a> por cima
+      card.innerHTML = `
+        <a class="news-link" href="${n.link || '#'}" target="_blank" rel="noopener noreferrer" style="display:block; color:inherit; text-decoration:none;">
+          <h3>${n.titulo || 'Sem título'}</h3>
+          <p class="meta" style="font-size:0.85rem; margin-bottom:6px; color:#666;">
+            ${n.fonte ? ('Fonte: ' + n.fonte) : ''} ${n.publicado_em ? ' • ' + formatarData(n.publicado_em) : ''}
+          </p>
+          <p>${truncar(n.resumo || '')}</p>
+          <p style="margin-top:8px; font-weight:600; color:var(--cor-agua-azul-claro);">Ler mais →</p>
+        </a>
+      `;
+      container.appendChild(card);
+    });
+  } catch (err) {
+    console.error('Erro ao carregar notícias:', err);
+    container.innerHTML = '<p>Erro ao carregar notícias. Verifique o backend (console do servidor) e a chave da API.</p>';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', carregarNoticias);
+</script>
 </body>
 </html>
