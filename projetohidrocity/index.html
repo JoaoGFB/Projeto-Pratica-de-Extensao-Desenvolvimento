@@ -10,19 +10,67 @@
 <body>
   <header>
     <h1>HidroCity</h1>
-    <p>Monitor da Crise Hídrica em Londrina</p>
+    <p>Monitor da Situação Hídrica em Londrina</p>
   </header>
   <main>
     <section class="noticias">
       <h2>Últimas Notícias</h2>
       <div class="news-container">
-        <!-- O conteúdo será preenchido dinamicamente via JS -->
+        <!--o conteúdo será preenchido dinamicamente via JS -->
       </div>
 
       <div class="btn-container">
         <a class="btn-portfolio" href="https://hidrocityextensao.netlify.app/" target="_blank" rel="noopener noreferrer">
           Saiba mais sobre o Projeto
         </a>
+      </div>
+    </section>
+
+    <section class="informacoes">
+      <h2>Informações Adicionais</h2>
+      <div class="info-container">
+
+        <div class="info-card">
+          <h3>Bacias e rios do Paraná (ANA)</h3>
+          <p>Informações oficiais sobre a hidrografia do Paraná, fornecidas pela Agência Nacional de Águas.</p>
+          <a href="https://www.ana.gov.br/sar/sin/b_parana" target="_blank" rel="noopener noreferrer">Acessar</a>
+        </div>
+
+        <div class="info-card">
+          <h3>Relatório anual de qualidade da água – Sanepar</h3>
+          <p>Documento da Sanepar que apresenta os resultados de qualidade da água em cidades paranaenses.</p>
+          <a href="https://www.sanepar.com.br/relatorio-anual-de-qualidade-da-agua" target="_blank" rel="noopener noreferrer">Acessar</a>
+        </div>
+
+        <div class="info-card">
+          <h3>Relatório da composição da água – Sanepar</h3>
+          <p>Resultados detalhados das análises físico-químicas e microbiológicas da água distribuída.</p>
+          <a href="https://www.sanepar.com.br/resultado-de-analises-da-agua" target="_blank" rel="noopener noreferrer">Acessar</a>
+        </div>
+
+        <div class="info-card">
+          <h3>Mapa de bacias hidrográficas em Londrina</h3>
+          <p>Arquivo educativo da Prefeitura de Londrina com informações sobre rios e bacias locais.</p>
+          <a href="https://repositorio.londrina.pr.gov.br/index.php/menu-ambiente/educacao-ambiental/49414-mapa-bacias-rio-da-minha-rua-2/file" target="_blank" rel="noopener noreferrer">Acessar</a>
+        </div>
+
+        <div class="info-card">
+          <h3>Mapa de rios e hidrografia – ResearchGate</h3>
+          <p>Artigo acadêmico com mapeamento da hidrografia de Londrina e região.</p>
+          <a href="https://www.researchgate.net/figure/Mapa-dos-Rios-Hidrografia-de-Londrina-Parana-Brasil-Mapeamento-da_fig14_354131629" target="_blank" rel="noopener noreferrer">Acessar</a>
+        </div>
+
+        <div class="info-card">
+          <h3>Geo Londrina (Prefeitura)</h3>
+          <p>Plataforma interativa com dados geográficos e ambientais da cidade.</p>
+          <a href="https://geo.londrina.pr.gov.br/portal/apps/webappviewer/index.html?id=ac375e1d32d64321b4dcd5672e5626bf" target="_blank" rel="noopener noreferrer">Acessar</a>
+        </div>
+
+        <div class="info-card">
+          <h3>Mapa interativo de Londrina – Cidade Brasil</h3>
+          <p>Mapa digital da cidade de Londrina com opções de navegação interativa.</p>
+          <a href="https://www.cidade-brasil.com.br/mapa-londrina.html" target="_blank" rel="noopener noreferrer">Acessar</a>
+        </div>
       </div>
     </section>
   </main>
@@ -33,9 +81,8 @@
     </p>
   </footer>
 
-  <!-- Script que busca as notícias no backend local -->
   <script>
-/* Config - para produção troque por 'https://SEU_BACKEND_PRODUCAO/news' */
+      /* Config - para produção troque por 'https://SEU_BACKEND_PRODUCAO/news' */
 const NEWS_ENDPOINT = 'http://localhost:5000/news';
 
 function formatarData(iso) {
@@ -86,6 +133,6 @@ async function carregarNoticias() {
 }
 
 document.addEventListener('DOMContentLoaded', carregarNoticias);
-</script>
+  </script>
 </body>
 </html>

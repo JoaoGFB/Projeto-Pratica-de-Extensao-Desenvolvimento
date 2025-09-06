@@ -118,6 +118,55 @@ main h2 {
   background: var(--cor-agua-azul-escuro);
   transform: scale(1.05);
 }
+.informacoes {
+  margin-top: 60px;
+}
+
+.info-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.info-card {
+  background: var(--cor-branco);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+  border-left: 6px solid var(--cor-agua-azul-escuro);
+  transition: transform 0.2s ease-in-out;
+}
+
+.info-card:hover {
+  transform: translateY(-5px);
+}
+
+.info-card h3 {
+  color: var(--cor-agua-profunda);
+  font-size: 1.2rem;
+  margin-bottom: 0.8rem;
+}
+
+.info-card p {
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  color: #444;
+}
+
+.info-card a {
+  display: inline-block;
+  background: var(--cor-agua-azul-claro);
+  color: var(--cor-branco);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: 0.3s ease-in-out;
+}
+
+.info-card a:hover {
+  background: var(--cor-agua-azul-escuro);
+}
 
 /*rodapé*/
 footer {
