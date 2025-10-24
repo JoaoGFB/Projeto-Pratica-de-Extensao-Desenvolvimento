@@ -1,20 +1,5 @@
-# app.py
-from flask import Flask, jsonify
-from flask_cors import CORS
 from news_api import buscar_noticias
-import datetime
-import os
-
-app = Flask(__name__)
-CORS(app)  # permite fetch do frontend hospedado em outro domínio
-
-# cache simples em memória
-cache = {
-    "noticias": [],
-    "ultima_atualizacao": None
-}
-
-CACHE_SEGUNDOS = int(os.getenv("CACHE_SECONDS", 86400))  # padrão 24h
+from datetime import datetime
 
 def atualizar_cache_noticias():
     consultas = {
@@ -38,21 +23,17 @@ def atualizar_cache_noticias():
         noticias_por_categoria[chave] = buscar_noticias(query=query, title=title, page_size=6)
 
     return noticias_por_categoria
-
-
-@app.route("/news")
-def news_endpoint():
-    agora = datetime.datetime.utcnow()
-    ultima = cache["ultima_atualizacao"]
-
-    if (ultima is None) or ((agora - ultima).total_seconds() > CACHE_SEGUNDOS):
-        cache["noticias"] = atualizar_cache_noticias()
-        cache["ultima_atualizacao"] = agora
-    else:
-        print("Cache de notícias ainda não esgotado!")
-
-    return jsonify(cache["noticias"])
-
 if __name__ == "__main__":
-    # Para teste local: python app.py
-    app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5000)))
+    print("Buscando notícias...")
+    agora = datetime.utcnow()
+    noticias = atualizar_cache_noticias()
+
+    for categoria, lista in noticias.items():
+        print(f"\n{'='*80}")
+        print(f" {categoria.upper()} — {len(lista)} notícias encontradas")
+        print(f"{'='*80}")
+        for n in lista:
+            print(f"• {n['titulo']} ({n['fonte']})")
+        print("-" * 80)
+
+    print(f"\n Finalizado às {agora.isoformat()} UTC")
