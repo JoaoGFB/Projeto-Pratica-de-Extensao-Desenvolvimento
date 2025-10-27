@@ -16,6 +16,10 @@ cache = {
 
 CACHE_SEGUNDOS = int(os.getenv("CACHE_SECONDS", 86400))  # padrão 24h
 
+@app.route("/")
+def index():
+    return render_template('index.html')
+
 @app.route("/news")
 def index():
     return render_template('index.html')
