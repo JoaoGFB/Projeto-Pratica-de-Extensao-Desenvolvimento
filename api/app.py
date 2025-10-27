@@ -1,5 +1,5 @@
 # app.py
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 from news_api import buscar_noticias
 import datetime
@@ -17,6 +17,8 @@ cache = {
 CACHE_SEGUNDOS = int(os.getenv("CACHE_SECONDS", 86400))  # padrão 24h
 
 @app.route("/news")
+def index():
+    return render_template('index.html')
 def news_endpoint():
     agora = datetime.datetime.utcnow()
     ultima = cache["ultima_atualizacao"]

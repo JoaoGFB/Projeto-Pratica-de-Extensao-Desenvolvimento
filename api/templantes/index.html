@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Monitor da Água em Londrina - HidroCity</title>
-  <link rel="stylesheet" href="Estilo/Style.css">
-  <link rel="shortcut icon" href="Estilo/Icones/ms-icon-310x310.png" type="image/x-icon">
+  <link rel="stylesheet" href="{{ url_for('static', filename='Style.css') }}">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='Imagens/ms-icon-310x310.png') }}" type="image/x-icon">
 </head>
 <body>
   <header>
@@ -75,7 +75,7 @@
     </section>
   </main>
   <footer>
-    <img src="Estilo/Icones/unifilLogo.png" alt="Logo UniFil">
+    <img src="{{ url_for('static', filename='Imagens/unifilLogo.png') }}" alt="Logo UniFil">
     <p class="footer-text">
       Projeto de Extensão HidroCity - Centro Universitário Filadélfia (UniFil)
     </p>
@@ -83,7 +83,7 @@
 
   <script>
       /* Config - para produção troque por 'https://SEU_BACKEND_PRODUCAO/news' */
-const NEWS_ENDPOINT = 'http://localhost:5000/news';
+const NEWS_ENDPOINT = '/news';
 
 function formatarData(iso) {
   if (!iso) return '';
