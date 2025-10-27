@@ -1,11 +1,17 @@
 # app.py
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS
 from news_api import buscar_noticias
 import datetime
 import os
 
-app = Flask(__name__)
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+app = Flask(
+    __name__,
+    root_path=project_root,
+    template_folder='projetohidrocity/templates',  # Pasta de Templates
+    static_folder='projetohidrocity/static'        # Pasta de Arquivos Estáticos
+)
 CORS(app)  # permite fetch do frontend hospedado em outro domínio
 
 # cache simples em memória
