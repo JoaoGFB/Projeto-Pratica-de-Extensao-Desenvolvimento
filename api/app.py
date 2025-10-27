@@ -21,8 +21,6 @@ def index():
     return render_template('index.html')
 
 @app.route("/news")
-def index():
-    return render_template('index.html')
 def news_endpoint():
     agora = datetime.datetime.utcnow()
     ultima = cache["ultima_atualizacao"]
