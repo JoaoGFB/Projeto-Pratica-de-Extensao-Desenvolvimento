@@ -80,8 +80,7 @@
       Projeto de Extensão HidroCity - Centro Universitário Filadélfia (UniFil)
     </p>
   </footer>
-
-  <script>
+   <script>
       /* Config - para produção troque por 'https://SEU_BACKEND_PRODUCAO/news' */
 const NEWS_ENDPOINT = '/news';
 
@@ -103,36 +102,54 @@ async function carregarNoticias() {
   try {
     const res = await fetch(NEWS_ENDPOINT);
     if (!res.ok) throw new Error('Status ' + res.status);
-    const noticias = await res.json();
-    if (!Array.isArray(noticias) || noticias.length === 0) {
+    const noticias_por_categoria = await res.json();
+
+    const todasAsNoticias = Object.values(noticias_por_categoria).flat();
+    if (todasAsNoticias.length === 0) {
       container.innerHTML = '<p>Nenhuma notícia encontrada.</p>';
       return;
     }
 
     container.innerHTML = '';
-    noticias.forEach(n => {
-      const card = document.createElement('article');
-      card.className = 'news-card';
-      // tornar o card inteiro clicável com <a> por cima
-      card.innerHTML = `
-        <a class="news-link" href="${n.link || '#'}" target="_blank" rel="noopener noreferrer" style="display:block; color:inherit; text-decoration:none;">
-          <h3>${n.titulo || 'Sem título'}</h3>
-          <p class="meta" style="font-size:0.85rem; margin-bottom:6px; color:#666;">
-            ${n.fonte ? ('Fonte: ' + n.fonte) : ''} ${n.publicado_em ? ' • ' + formatarData(n.publicado_em) : ''}
-          </p>
-          <p>${truncar(n.resumo || '')}</p>
-          <p style="margin-top:8px; font-weight:600; color:var(--cor-agua-azul-claro);">Ler mais →</p>
-        </a>
-      `;
-      container.appendChild(card);
+
+    const categorias = ["Londrina", "Paraná", "Brasil", "Mundo"];
+
+    categorias.forEach(categoria => {
+      const listaNoticias = noticias_por_categoria[categoria];
+
+      if (listaNoticias && listaNoticias.length > 0) {
+        const section = document.createElement('section');
+        section.className = 'categoria-noticias';
+        section.innerHTML = `<h3 class="categoria-titulo">${categoria} (${listaNoticias.length} notícias)</h3>`;
+
+        const categoriaContainer = document.createElement('div');
+        categoriaContainer.className = 'news-container-categoria';
+
+        listaNoticias.forEach(n => {
+          const card = document.createElement('article');
+          card.className = 'news-card';
+          card.innerHTML = `
+            <a class="news-link" href="${n.link || '#'}" target="_blank" rel="noopener noreferrer" style="display:block; color:inherit; text-decoration:none;">
+              <h3>${n.titulo || 'Sem título'}</h3>
+              <p class="meta" style="font-size:0.85rem; margin-bottom:6px; color:#666;">
+                ${n.fonte ? ('Fonte: ' + n.fonte) : ''} ${n.publicado_em ? ' • ' + formatarData(n.publicado_em) : ''}
+              </p>
+              <p>${truncar(n.resumo || '')}</p>
+              <p style="margin-top:8px; font-weight:600; color:var(--cor-agua-azul-claro);">Ler mais →</p>
+            </a>
+          `;
+          categoriaContainer.appendChild(card);
+        });
+
+        section.appendChild(categoriaContainer);
+        container.appendChild(section);
+      }
     });
-  } catch (err) {
-    console.error('Erro ao carregar notícias:', err);
-    container.innerHTML = '<p>Erro ao carregar notícias. Verifique o backend (console do servidor) e a chave da API.</p>';
-  }
+  } catch (err) {}
 }
 
 document.addEventListener('DOMContentLoaded', carregarNoticias);
   </script>
+
 </body>
 </html>
