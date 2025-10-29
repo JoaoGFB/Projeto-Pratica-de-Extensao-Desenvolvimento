@@ -6,11 +6,13 @@ import datetime
 import os
 
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 app = Flask(
     __name__,
-    root_path=project_root,
-    template_folder='projetohidrocity/templates',  # Pasta de Templates
-    static_folder='projetohidrocity/static'        # Pasta de Arquivos Estáticos
+    root_path=project_root, # Define a PASTA MÃE como raiz
+    # Caminhos de templeste e arquivos estáticos:
+    template_folder='projetohidrocity/templates',
+    static_folder='projetohidrocity/static'
 )
 CORS(app)  # permite fetch do frontend hospedado em outro domínio
 
