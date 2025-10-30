@@ -9,7 +9,7 @@ import time
 
 client = Client()
 GEMINI_MODEL = 'gemini-2.5-flash'
-DELAY_DE_CHAMADA = 6.2#Tem um limite para a camada gratis e é bom um delay a cada chamada
+DELAY_DE_CHAMADA = 6.3#Tem um limite para a camada gratis e é bom um delay a cada chamada
 
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 #$env:GEMINI_API_KEY="AIzaSyBYdZhb185KZA6NoKvkf4YiZq11g9dg0L8"
@@ -30,32 +30,6 @@ cache = {
 }
 
 CACHE_SEGUNDOS = int(os.getenv("CACHE_SECONDS", 86400))  # padrão 24h
-
-@app.route("/")
-def index():
-    return render_template('index.html')
-
-@app.route("/news")
-def news_endpoint():
-    agora = datetime.datetime.utcnow()
-    ultima = cache["ultima_atualizacao"]
-
-    if (ultima is None) or ((agora - ultima).total_seconds() > CACHE_SEGUNDOS):
-        cache["noticias"] = atualizar_cache_noticias()#QUISER A COM API é atualizar_cache_noticias2 basicamente
-        cache["ultima_atualizacao"] = agora
-    else:
-        print("Cache de notícias ainda não esgotado!")
-
-
-    return jsonify(cache["noticias"])
-
-if __name__ == "__main__":
-    # Para teste local: python app.py
-    app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5000)))
-
-
-
-
 
 
 #COM API DO GEMINI
@@ -148,3 +122,37 @@ def atualizar_cache_noticias():
         noticias_filtradas_por_categoria[chave] = noticias_brutas
     
     return noticias_filtradas_por_categoria
+
+
+
+
+
+@app.route("/")
+def index():
+    return render_template('index.html')
+
+@app.route("/news")
+def news_endpoint():
+    agora = datetime.datetime.utcnow()
+    ultima = cache["ultima_atualizacao"]
+
+    if (ultima is None) or ((agora - ultima).total_seconds() > CACHE_SEGUNDOS):
+        cache["noticias"] = atualizar_cache_noticias()
+        #QUISER A COM API é atualizar_cache_noticias2 basicamente
+        cache["ultima_atualizacao"] = agora
+    else:
+        print("Cache de notícias ainda não esgotado!")
+
+
+    return jsonify(cache["noticias"])
+
+if __name__ == "__main__":
+    # Para teste local: python app.py
+    app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5000)))
+
+
+
+
+
+
+

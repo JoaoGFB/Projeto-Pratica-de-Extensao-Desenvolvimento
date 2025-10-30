@@ -2,7 +2,7 @@
 import os
 import requests
 
-API_KEY = os.getenv("NEWS_API_KEY")  # defina no seu ambiente
+API_KEY = os.getenv("NEWS_API_KEY", "48d8bfb4886d4066bc16d1b20586f563")  # defina no seu ambiente
 URL = "https://newsapi.org/v2/everything"
 
 def buscar_noticias(query="", title=None, page_size=5):
