@@ -70,6 +70,12 @@ main h2 {
   transition: transform 0.2s ease-in-out;
 }
 
+.news-container-categoria {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; 
+}
+
 .news-card:hover {
   transform: translateY(-5px);
 }
