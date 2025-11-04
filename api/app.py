@@ -42,9 +42,17 @@ def noticia_relevante(titulo, sumario):
     # Uso da API do Gemini para classificação se a notícia compensa.
     # Prompt para a API
     prompt = (
-        "Classifique a seguinte notícia. A notícia deve ser sobre 'água', 'saneamento', 'recursos hídricos', "
-        "meio ambiente hídrico ou problemas de saúde pública relacionados à água. "
-        "EXCLUA notícias se o TEMA PRINCIPAL for esportes aquáticos, previsão do tempo/chuva sem contexto de crise, ou fofoca de celebridades. "
+        "Classifique a seguinte notícia. A relevância é **ALTA** se for sobre 'água', 'saneamento básico', 'recursos hídricos', 'crise hídrica', "
+        "'meio ambiente hídrico' ou 'saúde pública' (relacionada a água/flúor/doenças de veiculação hídrica). "
+        
+        "Notícias sobre 'previsão do tempo', 'chuva' ou 'seca' são relevantes APENAS se o contexto for de crise hídrica, enchentes, ou racionamento. "
+        
+        # MANTER EXCLUSÕES RÍGIDAS PARA O RUÍDO (O que não é o foco):
+        "DESCARTE (responda NÃO) se o tema principal for: "
+        "1. Política ou economia que não trate diretamente de saneamento, água ou meio ambiente."
+        "2. Esportes, Jogos, Tênis, Cultura Pop, TV/Tecnologia (upscaling, Pokémon, 5G, etc.)."
+        "3. Saúde ou dieta de celebridades (Luan Pereira), ou acidentes/mortes individuais (afogamento)."
+        
         f"Título: {titulo}. Resumo: {sumario}. "
         f"Responda APENAS com a palavra 'SIM' se for relevante, ou 'NÃO' se for irrelevante."
     )
