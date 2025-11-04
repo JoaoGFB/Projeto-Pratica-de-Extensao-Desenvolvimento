@@ -39,37 +39,42 @@ CACHE_SEGUNDOS = int(os.getenv("CACHE_SECONDS", 86400))  # padrão 24h
 
 #COM API DO GEMINI
 def noticia_relevante(titulo, sumario):
-    #Uso da API do Gemini para classificação se a notícia compensa.
-    #Prompt para a API
-   prompt = (
-    "Classifique a seguinte notícia. A notícia deve ser sobre 'água', 'saneamento', 'recursos hídricos', "
-    "meio ambiente hídrico ou problemas de saúde pública relacionados à água. "
-    # MUDANÇA AQUI: Simplificando a regra de exclusão
-    "EXCLUA notícias se o TEMA PRINCIPAL for esportes aquáticos, previsão do tempo/chuva sem contexto de crise, ou fofoca de celebridades. "
-    f"Título: {titulo}. Resumo: {sumario}. "
-    f"Responda APENAS com a palavra 'SIM' se for relevante, ou 'NÃO' se for irrelevante."
-)
-   for tentativa in range(2):
-    try:
-        #Tempo para erros
-        time.sleep(DELAY_DE_CHAMADA)
-        response = client.models.generate_content(
-            model=GEMINI_MODEL,
-            contents=prompt,
-            #Config de criatividade
-            config={"temperature":0.0}
+    # Uso da API do Gemini para classificação se a notícia compensa.
+    # Prompt para a API
+    prompt = (
+        "Classifique a seguinte notícia. A notícia deve ser sobre 'água', 'saneamento', 'recursos hídricos', "
+        "meio ambiente hídrico ou problemas de saúde pública relacionados à água. "
+        "EXCLUA notícias se o TEMA PRINCIPAL for esportes aquáticos, previsão do tempo/chuva sem contexto de crise, ou fofoca de celebridades. "
+        f"Título: {titulo}. Resumo: {sumario}. "
+        f"Responda APENAS com a palavra 'SIM' se for relevante, ou 'NÃO' se for irrelevante."
+    )
+    
+    for tentativa in range(2): # Tenta 0 e 1 (máximo de 2 tentativas)
+        try:
+            # Tempo para erros (delay principal)
+            time.sleep(DELAY_DE_CHAMADA)
+            response = client.models.generate_content(
+                model=GEMINI_MODEL,
+                contents=prompt,
+                # Config de criatividade
+                config={"temperature":0.0}
             )
-        return "SIM" in response.text.upper()
-    except Exception as e:
-        #Se erro
-        if tentativa == 0 and "503" in str(e):
-            print(f"ERRO 503 DETECTADO. Tentando novamente em 5 segundos.")
-            time.sleep(5)
-            continue
-        print(f"Erro fatal na API Gemini ({GEMINI_MODEL}): {e}. Mantendo notícia por segurança.")
-        return True # Mantém a notícia para evitar que o cache fique vazio
-    return True
+            # Se for bem-sucedido, retorna IMEDIATAMENTE
+            return "SIM" in response.text.upper()
+        
+        except Exception as e:
+            # Se a primeira tentativa falhar por sobrecarga (503), tenta novamente.
+            if tentativa == 0 and "503" in str(e):
+                print(f"ERRO 503 DETECTADO. Tentando novamente em 5 segundos.")
+                time.sleep(5) 
+                continue # Volta para a próxima tentativa (tentativa 1)
+            
+            # Se for a última tentativa ou qualquer outro erro (KeyError, etc.), falha.
+            print(f"Erro fatal na API Gemini ({GEMINI_MODEL}): {e}. Mantendo notícia por segurança.")
+            break 
 
+    # Retorna TRUE (mantém a notícia) se as duas tentativas falharem
+    return True
 def processar_cache_noticias_com_ai():
     #start_time = time.time()
     global cache
